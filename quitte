@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14213d">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22%3E%3Crect width=%22128%22 height=%22128%22 rx=%2230%22 fill=%22%2314213d%22/%3E%3Cline x1=%2228%22 y1=%2248%22 x2=%22100%22 y2=%2248%22 stroke=%22%23f4a300%22 stroke-width=%226%22 stroke-linecap=%22round%22/%3E%3Cline x1=%2264%22 y1=%2248%22 x2=%2264%22 y2=%2298%22 stroke=%22%23f4a300%22 stroke-width=%226%22 stroke-linecap=%22round%22/%3E%3Cline x1=%2244%22 y1=%22100%22 x2=%2284%22 y2=%22100%22 stroke=%22%23f4a300%22 stroke-width=%226%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M28 48L16 78M28 48L44 78M100 48L84 78M100 48L112 78%22 stroke=%22%23fff%22 stroke-width=%222%22 fill=%22none%22 stroke-linecap=%22round%22/%3E%3Cpath d=%22M14 78h32q0 14-16 14q-16 0-16-14z%22 fill=%22%231f9d8a%22/%3E%3Cpath d=%22M82 78h32q0 14-16 14q-16 0-16-14z%22 fill=%22%231f9d8a%22/%3E%3Ccircle cx=%2264%22 cy=%2242%22 r=%226%22 fill=%22%23f4a300%22/%3E%3C/svg%3E">
+<title>Quitte – partage de dépenses</title>
+<style>
+:root{--bg:#f3f5f9;--card:#fff;--ink:#14213d;--muted:#6b7590;--line:#e3e7ef;--brand:#14213d;--accent:#f4a300;--plus:#1f9d8a;--minus:#e4572e;--chip:#eaeef6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1424;--card:#172038;--ink:#eef1f8;--muted:#98a2bb;--line:#26314e;--brand:#0a1020;--chip:#212c49;--plus:#46c7b2;--minus:#ff8a65;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1424;--card:#172038;--ink:#eef1f8;--muted:#98a2bb;--line:#26314e;--brand:#0a1020;--chip:#212c49;--plus:#46c7b2;--minus:#ff8a65;color-scheme:dark}
+*{box-sizing:border-box}[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 "Avenir Next","Segoe UI",system-ui,sans-serif}
+#app{max-width:480px;margin:0 auto;min-height:100dvh;padding-bottom:110px}
+button,input,select{font:inherit;color:inherit}
+input,select{width:100%;padding:.65rem .75rem;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+button{cursor:pointer;border:0;background:none}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.top{background:var(--brand);color:#fff;padding:20px 18px 70px;border-radius:0 0 26px 26px}
+.ttl{display:flex;gap:12px;align-items:center}.emo{font-size:2rem}
+.top h1{margin:0;font-size:1.3rem}.top small{opacity:.7;display:block}
+.body{margin:-48px 16px 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
+.card h2{font-size:1.05rem;margin:0 0 6px}
+.hero{box-shadow:0 8px 22px rgba(20,33,61,.15)}
+.lbl{color:var(--muted);font-size:.9rem}.amt{font-size:2.2rem;font-weight:800;letter-spacing:-.02em}.sub{color:var(--muted);font-size:.85rem}
+.plus{color:var(--plus)}.minus{color:var(--minus)}
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+.list li:first-child,.list li.day:first-child{border-top:0}
+.day{display:block!important;color:var(--muted);font-size:.85rem;font-weight:700;padding-bottom:2px!important}
+.day::first-letter{text-transform:uppercase}
+.ex{cursor:pointer}
+.ico,.av{flex:none;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--chip);font-size:1.25rem}
+.av{color:#fff;font-weight:700;font-size:1rem}
+.mid{flex:1;min-width:0}.mid b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mid small{display:block;color:var(--muted)}
+.end{text-align:right}.end small{display:block;font-size:.78rem}
+.bar{height:7px;border-radius:4px;background:var(--chip);margin-top:6px;overflow:hidden}.bar i{display:block;height:100%}
+.bar .p{background:var(--plus)}.bar .m{background:var(--minus)}
+.empty{color:var(--muted);text-align:center;padding:14px 0;margin:0}
+label{display:block;font-size:.85rem;color:var(--muted);margin-bottom:12px}label input,label select{margin-top:4px;color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:.4rem .8rem;border-radius:999px;background:var(--chip);border:2px solid transparent;margin:0;color:var(--ink);font-size:.95rem;position:relative}
+.chip.on{border-color:var(--accent);font-weight:700}
+.chip input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
+.chip .w{width:4.6rem!important;margin:0 0 0 6px!important;padding:.2rem .4rem!important;border-radius:8px!important;text-align:right;font-size:.9rem}
+#f-split.m-eq .w{display:none}
+.nums{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bline{padding:12px 0;border-top:1px solid var(--line)}
+.bline .head{display:flex;justify-content:space-between;gap:8px}.bin{display:flex;gap:8px;margin:8px 0}.bin input{width:6.5rem;flex:none}.bin select{flex:1}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom,0px));background:#14213d;border:1px solid #3a4a73;color:#fff;padding:.6rem 1rem;border-radius:12px;z-index:30;display:flex;gap:14px;align-items:center;max-width:92vw}
+.toast button{color:var(--accent);font-weight:700}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:.02em;margin-bottom:14px}
+.logo svg{display:block;margin:0 auto 8px}
+.auth{min-height:100dvh;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:24px 20px}
+.acard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px 24px 18px;display:flex;flex-direction:column;gap:9px;text-align:center}
+.acard svg{align-self:center}.acard input{background:var(--bg)}
+.word{margin:6px 0 0;font-size:2.3rem;letter-spacing:-.02em}
+.atag{color:var(--muted);margin:0 0 6px;font-weight:600}
+.pw{position:relative}.pw input{padding-right:5.5rem}
+.eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:.85rem;font-weight:700}
+.aerr{color:var(--minus);font-size:.88rem;min-height:1.2em}
+.or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.8rem;font-weight:700}
+.or::before,.or::after{content:"";flex:1;border-top:1px solid var(--line)}
+.link{font-weight:700;font-size:.9rem;padding:.2rem}.link.b{color:#2d7dd2}
+.alocal{color:var(--muted);font-size:.8rem;margin:4px 0 0}
+.acard.small{display:block;padding:16px;font-size:.95rem}
+button:disabled{opacity:.5;cursor:default}
+.av.big{width:56px;height:56px;font-size:1.4rem}
+.kpis{display:flex;justify-content:space-around;text-align:center}.kpis b{display:block;font-size:1.3rem}.kpis small{color:var(--muted)}
+.swatches{display:flex;gap:10px;margin:4px 0 14px}.sw{width:34px;height:34px;border-radius:50%;border:3px solid transparent}.sw.on{border-color:var(--ink)}
+details{border-top:1px solid var(--line);padding:10px 0}details:first-of-type{border-top:0}summary{cursor:pointer;font-weight:700}
+details p,details ol{margin:8px 0 0;color:var(--muted);font-size:.92rem}details ol{padding-left:1.2rem}
+.langs{text-align:center;color:var(--muted)}
+#dlg{align-items:center}#dlg .panel{max-width:400px;width:calc(100% - 32px);border-radius:18px;padding:20px;animation:none}
+#dmsg{margin:0 0 12px;white-space:pre-line}
+textarea{width:100%;padding:.6rem;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;margin-bottom:12px}
+.dg{background:var(--minus)!important;color:#fff!important}
+input:disabled{opacity:.7}
+.chip:has(input:focus-visible){outline:3px solid var(--accent)}
+.primary{background:var(--accent);color:#14213d;font-weight:700;padding:.75rem 1rem;border-radius:12px;width:100%}
+.ghost{background:var(--chip);padding:.6rem 1rem;border-radius:12px}
+.sm{width:auto;padding:.45rem .8rem;font-size:.9rem}.danger{color:var(--minus)}
+.row2{display:flex;gap:8px}.row2 .primary:not(.sm){width:auto;flex:1}
+.tag{background:var(--chip);border-radius:999px;padding:.2rem .7rem;font-size:.8rem;color:var(--muted)}
+.big{font-size:2rem!important;font-weight:800;text-align:center;border:0!important;background:var(--chip)!important;margin-bottom:12px}
+.hint{color:var(--muted);font-size:.85rem;min-height:1.3em;margin:-4px 0 10px}
+.nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);z-index:5}
+.nav div{max-width:480px;margin:0 auto;display:flex}
+.nav button{flex:1;padding:8px 0 10px;font-size:.72rem;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;border-top:3px solid transparent}
+.nav button span{font-size:1.3rem}.nav button.on{color:var(--ink);font-weight:700;border-top-color:var(--accent)}
+#fab{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,0px));right:max(16px,calc(50% - 224px));width:58px;height:58px;border-radius:50%;background:var(--accent);color:#14213d;font-size:2rem;line-height:1;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:6}
+.sheet{position:fixed;inset:0;z-index:20;display:flex;align-items:flex-end;justify-content:center}
+.bd{position:absolute;inset:0;background:rgba(10,16,32,.55)}
+.panel{position:relative;width:100%;max-width:480px;max-height:92dvh;overflow:auto;background:var(--card);border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.panel{animation:none}}
+.panel h2{margin:0 0 12px}.panel .head{display:flex;justify-content:space-between;align-items:center}
+.welcome{padding:40px 18px;text-align:center}.logo{font-size:3rem}.welcome h1{margin:.2rem 0}.welcome p{color:var(--muted)}
+.welcome .card{text-align:left}.welcome .ghost{margin:4px}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<button id="fab" aria-label="Ajouter une dépense" hidden>+</button>
+<nav class="nav" id="nav" hidden><div>
+<button data-tab="exp"><span>🧾</span>Dépenses</button>
+<button data-tab="bal"><span>⚖️</span>Soldes</button>
+<button data-tab="bud"><span>🧳</span>Budget</button>
+<button data-tab="st"><span>📊</span>Stats</button>
+<button data-tab="grp"><span>👥</span>Groupe</button>
+<button data-tab="acc"><span>👤</span>Compte</button>
+</div></nav>
+<div class="sheet" id="sheet" hidden>
+<div class="bd" data-act="cancel"></div>
+<div class="panel" role="dialog" aria-label="Nouvelle dépense">
+<div class="head"><h2 id="f-title">Nouvelle dépense</h2><button class="ghost sm" data-act="cancel">Fermer</button></div>
+<input id="f-amt" class="big" type="number" inputmode="decimal" step="0.01" min="0.01" placeholder="0,00 €" aria-label="Montant en euros">
+<label>Description<input id="f-desc" placeholder="Courses, restaurant, essence…" maxlength="60"></label>
+<div class="chips" id="f-cats"></div>
+<label>Payé par<select id="f-payer"></select></label>
+<label>Date<input type="date" id="f-date"></label>
+<div class="chips" id="f-mode"><button type="button" class="chip on" data-mode="eq">Parts égales</button><button type="button" class="chip" data-mode="sh">Par parts</button><button type="button" class="chip" data-mode="ex">Montants exacts</button></div>
+<div class="head"><label style="margin:0">Partagé entre</label><span><button class="ghost sm" data-act="all">Tous</button> <button class="ghost sm" data-act="none">Aucun</button></span></div>
+<div class="chips" id="f-split" style="margin-top:8px"></div>
+<div class="hint" id="f-hint"></div>
+<button class="primary" id="f-save" data-act="save">Ajouter la dépense</button><button class="ghost danger" id="f-del" data-act="del" style="width:100%;margin-top:8px" hidden>Supprimer cette dépense</button>
+</div></div>
+<div class="sheet" id="dlg" hidden><div class="bd" data-act="dno"></div>
+<div class="panel" role="alertdialog" aria-labelledby="dmsg"><p id="dmsg"></p><textarea id="din" rows="5" hidden></textarea>
+<div class="row2"><button class="ghost" data-act="dno" style="flex:1">Annuler</button><button class="primary" id="dyes" data-act="dyes">OK</button></div></div></div>
+<div class="toast" id="toast" hidden></div>
+<script>
+let KEY="quitte-v1";
+const EMO=["✈️","🏠","🍕","🏔️","🎉","🛒"],COLORS=["#e4572e","#1f9d8a","#7b61ff","#f4a300","#2d7dd2","#d6457a"];
+const CATS=[["food","🍽️","Resto"],["shop","🛒","Courses"],["move","🚗","Transport"],["home","🏠","Logement"],["fun","🎉","Loisirs"],["other","🧾","Autre"]];
+let S={groups:[],cur:null},tab="exp",selCat="food",selEmo=EMO[0],q="",fc="",editId=null,mode="eq",undo=null,tt;
+function loadData(){S={groups:[],cur:null};try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&Array.isArray(s.groups))S=s}catch(e){}}
+let AU={users:{},session:null},authMode="login";
+try{const a=JSON.parse(localStorage.getItem("quitte-auth"));if(a&&a.users)AU=a}catch(e){}
+if(AU.session&&!AU.users[AU.session])AU.session=null;
+AU.prefs=Object.assign({lang:"fr",theme:"auto",cur:"EUR"},AU.prefs);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const LOC={fr:"fr-FR",en:"en-GB"};
+const eur=c=>(c/100).toLocaleString(LOC[AU.prefs.lang]||"fr-FR",{style:"currency",currency:AU.prefs.cur||"EUR"});
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const iso=n=>new Date(Date.now()-n*864e5).toISOString().slice(0,10);
+const G=()=>S.groups.find(g=>g.id===S.cur),P=(g,id)=>g.people.find(p=>p.id===id)||{name:"?"};
+const card=h=>`<div class="card">${h}</div>`;
+const dateLabel=d=>d===iso(0)?"Aujourd’hui":d===iso(1)?"Hier":new Date(d+"T12:00").toLocaleDateString(LOC[AU.prefs.lang]||"fr-FR",{weekday:"long",day:"numeric",month:"long"});
+
+// Calculs en centimes ; un remboursement est une dépense « payeur → un seul bénéficiaire »
+function shares(e){const ids=e.split,m={};
+ if(e.mode==="ex"){ids.forEach(id=>m[id]=e.w[id]||0);return m}
+ const w=e.mode==="sh"?ids.map(id=>e.w[id]??1):ids.map(()=>1),W=w.reduce((a,b)=>a+b,0)||1;let r=e.cents;
+ ids.forEach((id,i)=>{m[id]=Math.floor(e.cents*w[i]/W);r-=m[id]});
+ ids.forEach(id=>{if(r>0){m[id]++;r--}});return m}
+function balances(g){const b={};g.people.forEach(p=>b[p.id]=0);g.expenses.forEach(e=>{b[e.payer]+=e.cents;const s=shares(e);for(const id in s)b[id]-=s[id]});return b}
+function transfers(b){const c=[],d=[],out=[];for(const id in b){if(b[id]>0)c.push({id,v:b[id]});else if(b[id]<0)d.push({id,v:-b[id]})}
+ while(c.length&&d.length){c.sort((x,y)=>y.v-x.v);d.sort((x,y)=>y.v-x.v);const a=Math.min(c[0].v,d[0].v);out.push({from:d[0].id,to:c[0].id,c:a});c[0].v-=a;d[0].v-=a;if(!c[0].v)c.shift();if(!d[0].v)d.shift()}return out}
+
+const LOGO=(z,t)=>`<svg width="${z}" height="${z}" viewBox="0 0 128 128" role="img" aria-label="Logo Quitte">${t?'<rect width="128" height="128" rx="30" fill="#14213d" stroke="#3a4a73" stroke-width="2"/>':""}<line x1="28" y1="48" x2="100" y2="48" stroke="#f4a300" stroke-width="6" stroke-linecap="round"/><line x1="64" y1="48" x2="64" y2="98" stroke="#f4a300" stroke-width="6" stroke-linecap="round"/><line x1="44" y1="100" x2="84" y2="100" stroke="#f4a300" stroke-width="6" stroke-linecap="round"/><path d="M28 48L16 78M28 48L44 78M100 48L84 78M100 48L112 78" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M14 78h32q0 14-16 14q-16 0-16-14z" fill="#1f9d8a"/><path d="M82 78h32q0 14-16 14q-16 0-16-14z" fill="#1f9d8a"/><circle cx="64" cy="42" r="6" fill="#f4a300"/></svg>`;
+const topBar=g=>`<div class="top"><div class="brand">${LOGO(26,false)}<span>Quitte</span></div><div class="ttl"><span class="emo">${g.emoji}</span><div><h1>${esc(g.name)}</h1><small>${g.people.map(p=>esc(p.name)).join(", ")}</small></div></div></div>`;
+
+function viewExp(g){
+ if(g.people.length<2)return card(`<p class="empty">Ajoute au moins deux participants dans l’onglet Groupe pour commencer.</p>`);
+ const b=balances(g),mine=g.me?b[g.me]:null,real=g.expenses.filter(e=>e.type!=="pay"),total=real.reduce((s,e)=>s+e.cents,0);
+ const hero=`<div class="card hero"><div class="lbl">${mine===null?"Total du groupe":mine>0?"On te doit":mine<0?"Tu dois":"Tu es à l’équilibre"}</div><div class="amt ${mine>0?"plus":mine<0?"minus":""}">${eur(mine===null?total:Math.abs(mine))}</div><div class="sub">${eur(total)} dépensés par le groupe${g.me?`, dont ${eur(real.reduce((s,e)=>s+(shares(e)[g.me]||0),0))} pour toi`:""}</div></div>`;
+ if(!g.expenses.length)return hero+card(`<p class="empty">Aucune dépense pour l’instant.<br>Touche le bouton + pour ajouter la première.</p>`);
+ const sorted=g.expenses.filter(e=>(!fc||e.cat===fc)&&(!q||(e.desc+" "+P(g,e.payer).name).toLowerCase().includes(q.toLowerCase()))).sort((a,b)=>b.date.localeCompare(a.date)||b.id.localeCompare(a.id));let last="",h="";
+ for(const e of sorted){
+  if(e.date!==last){last=e.date;h+=`<li class="day">${dateLabel(e.date)}</li>`}
+  const c=CATS.find(c=>c[0]===e.cat)||CATS[5],pay=e.type==="pay",s=shares(e);let m="";
+  if(g.me){const d=(e.payer===g.me?e.cents:0)-(s[g.me]||0);if(d)m=`<small class="${d>0?"plus":"minus"}">${d>0?"on te doit":"tu dois"} ${eur(Math.abs(d))}</small>`}
+  h+=`<li class="ex" data-id="${e.id}"><span class="ico">${pay?"💸":c[1]}</span><div class="mid"><b>${esc(e.desc)}</b><small>${pay?`${esc(P(g,e.payer).name)} a remboursé ${esc(P(g,e.split[0]).name)}`:`Payé par ${esc(P(g,e.payer).name)}, ${e.split.length===g.people.length?"pour tous":"pour "+e.split.length}`}</small></div><div class="end"><b>${eur(e.cents)}</b>${m}</div></li>`}
+ const bar=`<input id="q" type="search" placeholder="Rechercher une dépense" value="${esc(q)}" aria-label="Rechercher"><div class="chips" style="margin:8px 0 4px"><button class="chip ${fc?"":"on"}" data-fc="">Toutes</button>${CATS.map(c=>`<button class="chip ${fc===c[0]?"on":""}" data-fc="${c[0]}" aria-label="${c[2]}">${c[1]}</button>`).join("")}</div>`;
+ return hero+card(bar+(h?`<ul class="list">${h}</ul>`:`<p class="empty">Aucun résultat.</p>`)+`<p class="sub" style="margin:8px 0 0">Touche une ligne pour la modifier.</p>`)}
+
+function viewBal(g){
+ const b=balances(g),max=Math.max(1,...Object.values(b).map(Math.abs));
+ const list=g.people.map((p,i)=>{const v=b[p.id];return `<li><span class="av" style="background:${COLORS[i%6]}">${esc(p.name[0].toUpperCase())}</span><div class="mid"><b>${esc(p.name)}${p.id===g.me?" (toi)":""}</b><div class="bar"><i class="${v>0?"p":"m"}" style="width:${Math.abs(v)/max*100}%"></i></div></div><div class="end ${v>0?"plus":v<0?"minus":""}"><b>${v>0?"+":v<0?"−":""}${eur(Math.abs(v))}</b></div></li>`}).join("");
+ const t=transfers(b);
+ const tr=t.length?t.map(x=>`<li><div class="mid"><b>${esc(P(g,x.from).name)} → ${esc(P(g,x.to).name)}</b><small>${eur(x.c)}</small></div><button class="ghost sm" data-act="pay" data-from="${x.from}" data-to="${x.to}" data-c="${x.c}">Marquer payé</button></li>`).join(""):`<li><p class="empty" style="width:100%">Tout est réglé 🎉</p></li>`;
+ return card(`<h2>Soldes</h2><ul class="list">${list}</ul>`)+card(`<h2>Pour être quittes</h2><ul class="list">${tr}</ul>`)+card(`<button class="primary" data-act="share">Partager le récapitulatif</button>`)}
+
+function viewStats(g){
+ const ex=g.expenses.filter(e=>e.type!=="pay"),tot=ex.reduce((s,e)=>s+e.cents,0);
+ if(!tot)return card(`<p class="empty">Les statistiques apparaîtront dès la première dépense.</p>`);
+ const by={},pd={};ex.forEach(e=>{by[e.cat]=(by[e.cat]||0)+e.cents;pd[e.payer]=(pd[e.payer]||0)+e.cents});
+ const bars=(r,max)=>r.map(x=>`<li><span class="ico">${x[0]}</span><div class="mid"><b>${esc(x[1])}</b><div class="bar"><i style="width:${x[2]/max*100}%;background:var(--accent)"></i></div></div><div class="end"><b>${eur(x[2])}</b></div></li>`).join("");
+ const cr=CATS.filter(c=>by[c[0]]).map(c=>[c[1],c[2],by[c[0]]]).sort((a,b)=>b[2]-a[2]);
+ const pr=g.people.filter(p=>pd[p.id]).map(p=>[esc(p.name[0].toUpperCase()),p.name,pd[p.id]]).sort((a,b)=>b[2]-a[2]);
+ return card(`<div class="lbl">Total dépensé</div><div class="amt">${eur(tot)}</div><div class="sub">${eur(tot/g.people.length)} par personne en moyenne, ${ex.length} dépense${ex.length>1?"s":""}</div>`)
+  +card(`<h2>Par catégorie</h2><ul class="list">${bars(cr,cr[0][2])}</ul>`)+card(`<h2>Qui a avancé l’argent</h2><ul class="list">${bars(pr,pr[0][2])}</ul>`)}
+
+function viewGrp(g){
+ return card(`<label>Nom du groupe<input id="g-name" value="${esc(g.name)}" maxlength="40"></label><label style="margin:0">Qui es-tu ?<select id="g-me">${g.people.map(p=>`<option value="${p.id}" ${p.id===g.me?"selected":""}>${esc(p.name)}</option>`).join("")}</select></label>`)
+ +card(`<h2>Participants</h2><ul class="list">${g.people.map((p,i)=>`<li><span class="av" style="background:${COLORS[i%6]}">${esc(p.name[0].toUpperCase())}</span><div class="mid"><b>${esc(p.name)}</b></div><button class="ghost sm" data-act="rm" data-id="${p.id}" aria-label="Retirer ${esc(p.name)}">Retirer</button></li>`).join("")}</ul><div class="row2" style="margin-top:10px"><input id="m-name" placeholder="Ajouter un prénom" maxlength="30"><button class="primary sm" data-act="addm">Ajouter</button></div>`)
+ +card(`<h2>Mes groupes</h2><ul class="list">${S.groups.map(x=>`<li><span class="ico">${x.emoji}</span><div class="mid"><b>${esc(x.name)}</b></div>${x.id===g.id?`<span class="tag">Ouvert</span>`:`<button class="ghost sm" data-act="sw" data-id="${x.id}">Ouvrir</button>`}</li>`).join("")}</ul><div class="row2" style="margin-top:10px"><button class="primary" data-act="newg">Nouveau groupe</button><button class="ghost danger" data-act="delg">Supprimer</button></div>`)}
+
+function welcome(){selEmo=EMO[0];return `<div class="welcome"><div class="logo">${LOGO(104,true)}</div><h1>Quitte</h1><p>Partagez les dépenses d’un voyage, d’une coloc ou d’une soirée. Chacun sait qui doit quoi à qui.</p>
+<div class="card"><label>Nom du groupe<input id="w-name" placeholder="Vacances en Corse" maxlength="40"></label>
+<div class="chips" id="w-emo">${EMO.map((e,i)=>`<button type="button" class="chip ${i?"":"on"}" data-emo="${e}">${e}</button>`).join("")}</div>
+<label>Participants, séparés par une virgule<input id="w-people" placeholder="Léa, Tom, Inès"></label>
+<button class="primary" data-act="create">Créer le groupe</button></div>
+<button class="ghost" data-act="demo">Essayer avec un exemple</button>${S.groups.length?`<button class="ghost" data-act="back">Retour</button>`:""}</div>`}
+
+const UNITS=[["t","au total"],["d","par jour"],["p","par personne"],["pd","par pers. et par jour"]];
+function bud(g){if(!g.budget)g.budget={n:Math.max(1,g.people.length),days:7,margin:10,lines:{food:{a:25,u:"pd"},shop:{a:10,u:"pd"},move:{a:150,u:"p"},home:{a:60,u:"d"},fun:{a:15,u:"pd"},other:{a:0,u:"t"}}};return g.budget}
+function bcalc(g){
+ const b=bud(g),n=Math.max(1,+b.n||1),d=Math.max(1,+b.days||1),L={};let sub=0;
+ for(const c of CATS){const l=b.lines[c[0]]||{a:0,u:"t"},v=(+l.a||0)*(l.u.includes("d")?d:1)*(l.u.includes("p")?n:1);L[c[0]]=v;sub+=v}
+ const tot=sub*(1+(+b.margin||0)/100);return{n,d,L,sub,tot,mar:tot-sub}}
+function viewBud(g){
+ const b=bud(g),k=bcalc(g);
+ const chips=[["Solo",1],["Duo",2],["Groupe",Math.max(3,g.people.length)]].map(([l,v])=>`<button class="chip ${(l==="Groupe"?k.n>=3:k.n===v)?"on":""}" data-trip="${v}">${l}</button>`).join("");
+ const lines=CATS.map(c=>{const l=b.lines[c[0]]||{a:0,u:"t"};return `<div class="bline"><div class="head"><b>${c[1]} ${c[2]}</b><b data-bt="${c[0]}"></b></div><div class="bin"><input type="number" min="0" step="0.01" inputmode="decimal" value="${l.a}" data-bl="${c[0]}" aria-label="Montant ${c[2]}"><select data-bu="${c[0]}" aria-label="Unité ${c[2]}">${UNITS.map(u=>`<option value="${u[0]}" ${u[0]===l.u?"selected":""}>${u[1]}</option>`).join("")}</select></div><div class="bar" data-bbar="${c[0]}"><i></i></div><small class="sub" data-bsp="${c[0]}"></small></div>`}).join("");
+ return `<div class="card hero"><div class="lbl">Budget total du voyage</div><div class="amt" data-k="tot"></div><div class="sub" data-k="sub"></div><div class="bar" data-k="bar" style="height:10px"><i></i></div><small class="sub" data-k="real"></small></div>`
+ +card(`<h2>Mon voyage</h2><div class="chips">${chips}</div><div class="nums"><label>Voyageurs<input type="number" min="1" step="1" inputmode="numeric" data-bf="n" value="${b.n}"></label><label>Durée (jours)<input type="number" min="1" step="1" inputmode="numeric" data-bf="days" value="${b.days}"></label></div><label style="margin:0">Marge pour imprévus (%)<input type="number" min="0" step="1" inputmode="numeric" data-bf="margin" value="${b.margin}"></label>`)
+ +card(`<h2>Détail par poste</h2><p class="sub" style="margin:0 0 4px">Valeurs d’exemple : remplace-les par tes prévisions. Tout se recalcule en direct.</p>${lines}`)
+ +card(`<h2>En un coup d’œil</h2><ul class="list" id="bk"></ul>`)}
+function paintBud(){
+ const g=G(),k=bcalc(g),sp={};
+ g.expenses.filter(e=>e.type!=="pay").forEach(e=>sp[e.cat]=(sp[e.cat]||0)+e.cents/100);
+ const E=v=>eur(Math.round(v*100)),set=(s,t)=>{const el=$(s);if(el)el.textContent=t};
+ const bar=(s,r)=>{const el=$(s);if(!el)return;const i=el.firstElementChild;i.style.width=Math.min(100,r*100)+"%";i.style.background=r>1?"var(--minus)":"var(--plus)"};
+ const spent=Object.values(sp).reduce((a,c)=>a+c,0);
+ $$("[data-trip]").forEach(c=>c.classList.toggle("on",c.textContent==="Groupe"?k.n>=3:k.n===+c.dataset.trip));
+ set("[data-k=tot]",E(k.tot));set("[data-k=sub]",`${k.n} voyageur${k.n>1?"s":""}, ${k.d} jour${k.d>1?"s":""}`);
+ bar("[data-k=bar]",k.tot?spent/k.tot:0);
+ set("[data-k=real]",!spent?"Aucune dépense enregistrée pour l’instant":spent<=k.tot?`Déjà dépensé : ${E(spent)} (${Math.round(spent/k.tot*100)} %), il reste ${E(k.tot-spent)}`:`Déjà dépensé : ${E(spent)}, dépassement de ${E(spent-k.tot)}`);
+ for(const c of CATS){const id=c[0],v=k.L[id];
+  set(`[data-bt=${id}]`,E(v));bar(`[data-bbar=${id}]`,v?(sp[id]||0)/v:0);
+  set(`[data-bsp=${id}]`,sp[id]?`Déjà dépensé : ${E(sp[id])}${v?` sur ${E(v)}`:""}`:"Rien de dépensé pour l’instant")}
+ const bk=$("#bk");
+ if(bk)bk.innerHTML=[["Par personne",k.tot/k.n],["Par jour",k.tot/k.d],["Par personne et par jour",k.tot/k.n/k.d],["Dont marge pour imprévus",k.mar]].map(r=>`<li><div class="mid">${r[0]}</div><div class="end"><b>${E(r[1])}</b></div></li>`).join("")}
+
+const DICT={
+"Les bons comptes font les bons amis.":"Good accounts make good friends.",
+"Inscris-toi pour partager tes dépenses entre amis.":"Sign up to share expenses with friends.",
+"Nom complet":"Full name","Nom d’utilisateur":"Username","Mot de passe":"Password","Confirmer le mot de passe":"Confirm password",
+"Afficher":"Show","Masquer":"Hide","Se connecter":"Log in","S’inscrire":"Sign up","Mot de passe oublié ?":"Forgot password?",
+"Les comptes sont enregistrés sur cet appareil uniquement.":"Accounts are stored on this device only.",
+"Tu as déjà un compte ?":"Already have an account?","Tu n’as pas de compte ?":"Don’t have an account?","Logo Quitte":"Quitte logo",
+"Identifiant ou mot de passe incorrect.":"Incorrect username or password.","Entre ton nom.":"Enter your name.",
+"Nom d’utilisateur : 3 à 20 caractères (lettres, chiffres, point, tiret bas).":"Username: 3 to 20 characters (letters, digits, dot, underscore).",
+"Ce nom d’utilisateur est déjà pris.":"This username is already taken.",
+"Le mot de passe doit faire au moins 6 caractères.":"Password must be at least 6 characters.",
+"Les mots de passe ne correspondent pas.":"Passwords don’t match.",
+"Les comptes sont enregistrés uniquement sur cet appareil : le mot de passe ne peut pas être envoyé par e-mail. Si tu l’as perdu, crée un nouveau compte.":"Accounts are stored on this device only, so your password can’t be sent by email. If you’ve lost it, create a new account.",
+"Mot de passe actuel incorrect.":"Current password is incorrect.",
+"Partagez les dépenses d’un voyage, d’une coloc ou d’une soirée. Chacun sait qui doit quoi à qui.":"Share the expenses of a trip, a flat share or a night out. Everyone knows who owes what to whom.",
+"Nom du groupe":"Group name","Vacances en Corse":"Holiday in Corsica","Participants, séparés par une virgule":"Participants, separated by commas",
+"Créer le groupe":"Create group","Essayer avec un exemple":"Try an example","Retour":"Back",
+"Ajoute au moins deux participants, séparés par une virgule.":"Add at least two participants, separated by commas.",
+"Dépenses":"Expenses","Soldes":"Balances","Budget":"Budget","Stats":"Stats","Groupe":"Group","Compte":"Account",
+"On te doit":"You are owed","Tu dois":"You owe","Tu es à l’équilibre":"You’re all square","Total du groupe":"Group total",
+"Aucune dépense pour l’instant.":"No expenses yet.","Touche le bouton + pour ajouter la première.":"Tap the + button to add the first one.",
+"Ajoute au moins deux participants dans l’onglet Groupe pour commencer.":"Add at least two participants in the Group tab to get started.",
+"Rechercher une dépense":"Search expenses","Rechercher":"Search","Toutes":"All","Aucun résultat.":"No results.",
+"Touche une ligne pour la modifier.":"Tap a row to edit it.","Aujourd’hui":"Today","Hier":"Yesterday","Remboursement":"Repayment",
+"Ajouter une dépense":"Add an expense",
+"Pour être quittes":"To settle up","Marquer payé":"Mark as paid","Tout est réglé 🎉":"All settled 🎉","Tout est réglé":"All settled",
+"Partager le récapitulatif":"Share summary","Pour être quittes :":"To settle up:","Récapitulatif copié":"Summary copied",
+"Total dépensé":"Total spent","Par catégorie":"By category","Qui a avancé l’argent":"Who paid upfront",
+"Les statistiques apparaîtront dès la première dépense.":"Statistics will appear as soon as you add an expense.",
+"Resto":"Restaurants","Courses":"Groceries","Transport":"Transport","Logement":"Accommodation","Loisirs":"Leisure","Autre":"Other",
+"Montant":"Amount","Montant en euros":"Amount",
+"Budget total du voyage":"Total trip budget","Aucune dépense enregistrée pour l’instant":"No expenses recorded yet",
+"Rien de dépensé pour l’instant":"Nothing spent yet","Mon voyage":"My trip","Solo":"Solo","Duo":"Duo","Voyageurs":"Travellers",
+"Durée (jours)":"Duration (days)","Marge pour imprévus (%)":"Contingency margin (%)","Détail par poste":"Breakdown by item",
+"Valeurs d’exemple : remplace-les par tes prévisions. Tout se recalcule en direct.":"Sample values: replace them with your own estimates. Everything recalculates live.",
+"En un coup d’œil":"At a glance","Par personne":"Per person","Par jour":"Per day","Par personne et par jour":"Per person per day",
+"Dont marge pour imprévus":"Of which contingency","au total":"in total","par jour":"per day","par personne":"per person","par pers. et par jour":"per person per day",
+"Qui es-tu ?":"Who are you?","Participants":"Participants","Retirer":"Remove","Ajouter un prénom":"Add a first name","Ajouter":"Add",
+"Mes groupes":"My groups","Ouvert":"Current","Ouvrir":"Open","Nouveau groupe":"New group","Supprimer":"Delete",
+"Supprime d’abord les dépenses de cette personne.":"First delete this person’s expenses.","Ce prénom existe déjà.":"This name already exists.",
+"Supprimer ce groupe et toutes ses dépenses ?":"Delete this group and all its expenses?",
+"Nouvelle dépense":"New expense","Modifier la dépense":"Edit expense","Fermer":"Close","Description":"Description",
+"Courses, restaurant, essence…":"Groceries, restaurant, fuel…","Payé par":"Paid by","Date":"Date","Partagé entre":"Split between",
+"Tous":"All","Aucun":"None","Parts égales":"Equal split","Par parts":"By shares","Montants exacts":"Exact amounts","Parts":"Shares",
+"Ajouter la dépense":"Add expense","Enregistrer":"Save","Supprimer cette dépense":"Delete this expense","Annuler":"Cancel","OK":"OK",
+"Choisis au moins une personne.":"Pick at least one person.","Indique au moins une part.":"Enter at least one share.",
+"Indique la part de chacun.":"Enter each person’s share.","Le total correspond.":"The total matches.",
+"Dépense supprimée":"Expense deleted","Copie impossible ici":"Copying isn’t possible here",
+"Groupes":"Groups","Membre depuis":"Member since","Profil":"Profile","Nom affiché":"Display name","Couleur de l’avatar":"Avatar colour",
+"Enregistrer le profil":"Save profile","Préférences":"Preferences","Langue":"Language","Thème":"Theme","Automatique":"Automatic",
+"Clair":"Light","Sombre":"Dark","Devise d’affichage":"Display currency","Livre (£)":"Pound (£)","Franc suisse (CHF)":"Swiss franc (CHF)",
+"Affichage seulement : les montants ne sont pas convertis.":"Display only: amounts are not converted.",
+"Sécurité":"Security","Mot de passe actuel":"Current password","Nouveau mot de passe":"New password",
+"Confirmer le nouveau mot de passe":"Confirm new password","Changer le mot de passe":"Change password","Mes données":"My data",
+"Tes données sont stockées sur cet appareil. Fais une sauvegarde pour les garder ou les déplacer.":"Your data is stored on this device. Make a backup to keep or move it.",
+"Sauvegarder":"Back up","Restaurer":"Restore","Effacer toutes mes données":"Erase all my data","Aide et infos":"Help and info",
+"Comment ça marche ?":"How does it work?","Crée un groupe et ajoute les participants.":"Create a group and add the participants.",
+"Note chaque dépense : qui a payé et pour qui.":"Record each expense: who paid and for whom.",
+"Consulte l’onglet Soldes pour voir qui doit quoi.":"Check the Balances tab to see who owes what.",
+"Utilise l’onglet Budget pour préparer un voyage.":"Use the Budget tab to plan a trip.",
+"Confidentialité":"Privacy","Aucune donnée n’est envoyée à un serveur. Tout reste dans le navigateur de cet appareil.":"No data is sent to a server. Everything stays in this device’s browser.",
+"Conditions d’utilisation":"Terms of use","Quitte est fourni tel quel, sans garantie. Vérifie toujours tes comptes avant de faire un virement.":"Quitte is provided as is, without warranty. Always double-check your numbers before making a transfer.",
+"À propos":"About","Quitte, version 1.0. Une application pour partager les dépenses entre amis, en couple ou en solo.":"Quitte, version 1.0. An app to share expenses with friends, as a couple or solo.",
+"Se déconnecter":"Log out","Supprimer mon compte":"Delete my account",
+"Supprimer ton compte et toutes tes données sur cet appareil ?":"Delete your account and all your data on this device?",
+"Colle ici ta sauvegarde :":"Paste your backup here:","Effacer":"Erase",
+"Effacer tous tes groupes et toutes tes dépenses ? Ton compte est conservé.":"Erase all your groups and expenses? Your account is kept.",
+"Profil enregistré":"Profile saved","Mot de passe mis à jour":"Password updated","Sauvegarde copiée":"Backup copied",
+"Données restaurées":"Data restored","Sauvegarde invalide.":"Invalid backup.","Données effacées":"Data erased",
+"Week-end à Lyon":"Weekend in Lyon","Location du chalet":"Chalet rental","Courses du vendredi":"Friday groceries",
+"Essence et péage":"Fuel and tolls","Restaurant le Bouchon":"Le Bouchon restaurant","Karting":"Karting"};
+const PAT=[
+[/^Payé par (.+), pour tous$/,a=>`Paid by ${a}, for everyone`],
+[/^Payé par (.+), pour (\d+)$/,(a,b)=>`Paid by ${a}, for ${b}`],
+[/^(.+) a remboursé (.+)$/,(a,b)=>`${a} repaid ${b}`],
+[/^on te doit (.+)$/,a=>`you are owed ${a}`],[/^tu dois (.+)$/,a=>`you owe ${a}`],
+[/^(.+) dépensés par le groupe, dont (.+) pour toi$/,(a,b)=>`${a} spent by the group, of which ${b} is yours`],
+[/^(.+) dépensés par le groupe$/,a=>`${a} spent by the group`],
+[/^(.+) \(toi\)$/,a=>`${a} (you)`],
+[/^(.+) par personne en moyenne, (\d+) dépenses?$/,(a,n)=>`${a} per person on average, ${n} expense${n>1?"s":""}`],
+[/^(\d+) voyageurs?, (\d+) jours?$/,(n,d)=>`${n} traveller${n>1?"s":""}, ${d} day${d>1?"s":""}`],
+[/^Déjà dépensé : (.+) \((\d+) %\), il reste (.+)$/,(a,b,c)=>`Spent so far: ${a} (${b}%), ${c} left`],
+[/^Déjà dépensé : (.+), dépassement de (.+)$/,(a,b)=>`Spent so far: ${a}, over by ${b}`],
+[/^Déjà dépensé : (.+) sur (.+)$/,(a,b)=>`Spent so far: ${a} of ${b}`],
+[/^Déjà dépensé : (.+)$/,a=>`Spent so far: ${a}`],
+[/^([^\p{L}\s]+) (Resto|Courses|Transport|Logement|Loisirs|Autre)$/u,(e,c)=>`${e} ${DICT[c]}`],
+[/^Montant (.+)$/,a=>`Amount ${DICT[a]||a}`],[/^Unité (.+)$/,a=>`Unit ${DICT[a]||a}`],
+[/^Retirer (.+)$/,a=>`Remove ${a}`],[/^Couleur (\d)$/,a=>`Colour ${a}`],
+[/^Parts égales : (.+) par personne \((\d+)\)$/,(a,n)=>`Equal split: ${a} per person (${n})`],
+[/^Reste à répartir : (.+)$/,a=>`Left to split: ${a}`],[/^Dépassement de (.+)$/,a=>`Over by ${a}`],
+[/^Les montants doivent totaliser exactement (.+)\.$/,a=>`Amounts must add up to exactly ${a}.`]];
+const LANG=()=>AU.prefs.lang;
+function T(s){
+ if(LANG()==="fr")return s;
+ const m=s.match(/^(\s*)([\s\S]*?)(\s*)$/),c=m[2];
+ if(DICT[c]!==undefined)return m[1]+DICT[c]+m[3];
+ for(const[re,f]of PAT){const x=c.match(re);if(x)return m[1]+f(...x.slice(1))+m[3]}
+ return s}
+const memT=new WeakMap(),memA=new WeakMap(),SKIP=/^(SCRIPT|STYLE|TEXTAREA)$/;
+function trText(n){const cur=n.nodeValue,m=memT.get(n),o=m&&cur===m.t?m.o:cur,t=T(o);memT.set(n,{o,t});if(cur!==t)n.nodeValue=t}
+function trAttrs(el){for(const a of["placeholder","aria-label","title"]){const cur=el.getAttribute(a);if(cur==null)continue;
+ const mm=memA.get(el)||{},m=mm[a],o=m&&cur===m.t?m.o:cur,t=T(o);mm[a]={o,t};memA.set(el,mm);if(cur!==t)el.setAttribute(a,t)}}
+function trTree(r){
+ if(r.nodeType===3){if(r.nodeValue.trim()&&!SKIP.test(r.parentNode.tagName))trText(r);return}
+ if(r.nodeType!==1||SKIP.test(r.tagName))return;
+ trAttrs(r);
+ const w=document.createTreeWalker(r,5,{acceptNode:n=>SKIP.test((n.nodeType===3?n.parentNode:n).tagName)?2:1});
+ let n;while(n=w.nextNode()){if(n.nodeType===3){if(n.nodeValue.trim())trText(n)}else trAttrs(n)}}
+const MOCFG={childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:["placeholder","aria-label","title"]};
+const mo=new MutationObserver(rs=>{mo.disconnect();
+ for(const r of rs){if(r.type==="characterData")trTree(r.target);else if(r.type==="attributes")trAttrs(r.target);else r.addedNodes.forEach(trTree)}
+ mo.observe(document.body,MOCFG)});
+function applyPrefs(){
+ const P=AU.prefs,r=document.documentElement;r.lang=P.lang;
+ if(P.theme==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",P.theme);
+ document.title=P.lang==="en"?"Quitte – shared expenses":"Quitte – partage de dépenses"}
+function setPref(k,v){AU.prefs[k]=v;saveAuth();applyPrefs();render();trTree(document.body)}
+window.alert=m=>toast(m);
+let dres=null;
+function ask(msg,o={}){return new Promise(r=>{dres=r;$("#dmsg").textContent=msg;const i=$("#din");i.hidden=!o.input;i.value="";
+ const y=$("#dyes");y.textContent=o.ok||"OK";y.className=o.danger?"primary dg":"primary";$("#dlg").hidden=false;if(o.input)i.focus()})}
+function dclose(v){$("#dlg").hidden=true;if(dres){const r=dres;dres=null;r(v)}}
+async function changePw(){
+ const a=AU.users[AU.session],o=$("#c-old").value,n=$("#c-new").value,n2=$("#c-new2").value;
+ const err=(await hashPw(o,a.salt))!==a.hash?"Mot de passe actuel incorrect.":n.length<6?"Le mot de passe doit faire au moins 6 caractères.":n!==n2?"Les mots de passe ne correspondent pas.":"";
+ if(err){$("#c-err").textContent=err;return}
+ a.salt=uid()+uid();a.hash=await hashPw(n,a.salt);saveAuth();render();toast("Mot de passe mis à jour")}
+function accTop(){const a=AU.users[AU.session];
+ return `<div class="top"><div class="brand">${LOGO(26,false)}<span>Quitte</span></div><div class="ttl"><span class="av big" style="background:${a.color||COLORS[0]}">${esc(a.name[0].toUpperCase())}</span><div><h1>${esc(a.name)}</h1><small>@${esc(AU.session)}</small></div></div></div>`}
+function viewAcc(){
+ const u=AU.session,a=AU.users[u],P=AU.prefs,nG=S.groups.length,nE=S.groups.reduce((t,g)=>t+g.expenses.filter(e=>e.type!=="pay").length,0);
+ const sel=(k,lab,o)=>`<label>${lab}<select data-pref="${k}">${o.map(x=>`<option value="${x[0]}" ${x[0]===P[k]?"selected":""}>${x[1]}</option>`).join("")}</select></label>`;
+ const since=a.created?new Date(a.created).toLocaleDateString(LOC[P.lang]||"fr-FR",{month:"short",year:"numeric"}):"–";
+ return card(`<div class="kpis"><div><b>${nG}</b><small>Groupes</small></div><div><b>${nE}</b><small>Dépenses</small></div><div><b>${since}</b><small>Membre depuis</small></div></div>`)
+ +card(`<h2>Profil</h2><label>Nom affiché<input id="c-name" value="${esc(a.name)}" maxlength="40"></label><label>Nom d’utilisateur<input value="@${esc(u)}" disabled></label><div class="lbl" style="margin-bottom:4px">Couleur de l’avatar</div><div class="swatches">${COLORS.map((c,i)=>`<button class="sw ${(a.color||COLORS[0])===c?"on":""}" style="background:${c}" data-ac="${i}" aria-label="Couleur ${i+1}"></button>`).join("")}</div><button class="primary" data-act="savep">Enregistrer le profil</button>`)
+ +card(`<h2>Préférences</h2>${sel("lang","Langue",[["fr","Français"],["en","English"]])}${sel("theme","Thème",[["auto","Automatique"],["light","Clair"],["dark","Sombre"]])}${sel("cur","Devise d’affichage",[["EUR","Euro (€)"],["USD","Dollar ($)"],["GBP","Livre (£)"],["CHF","Franc suisse (CHF)"]])}<p class="sub" style="margin:0">Affichage seulement : les montants ne sont pas convertis.</p>`)
+ +card(`<h2>Sécurité</h2><label>Mot de passe actuel<input id="c-old" type="password" autocomplete="current-password"></label><label>Nouveau mot de passe<input id="c-new" type="password" autocomplete="new-password"></label><label>Confirmer le nouveau mot de passe<input id="c-new2" type="password" autocomplete="new-password"></label><div class="aerr" id="c-err" role="alert"></div><button class="primary" data-act="chpw">Changer le mot de passe</button>`)
+ +card(`<h2>Mes données</h2><p class="sub" style="margin:0 0 10px">Tes données sont stockées sur cet appareil. Fais une sauvegarde pour les garder ou les déplacer.</p><div class="row2"><button class="ghost" data-act="backup" style="flex:1">Sauvegarder</button><button class="ghost" data-act="restore" style="flex:1">Restaurer</button></div><button class="ghost danger" data-act="wipe" style="margin-top:8px;width:100%">Effacer toutes mes données</button>`)
+ +card(`<h2>Aide et infos</h2><details><summary>Comment ça marche ?</summary><ol><li>Crée un groupe et ajoute les participants.</li><li>Note chaque dépense : qui a payé et pour qui.</li><li>Consulte l’onglet Soldes pour voir qui doit quoi.</li><li>Utilise l’onglet Budget pour préparer un voyage.</li></ol></details><details><summary>Confidentialité</summary><p>Aucune donnée n’est envoyée à un serveur. Tout reste dans le navigateur de cet appareil.</p></details><details><summary>Conditions d’utilisation</summary><p>Quitte est fourni tel quel, sans garantie. Vérifie toujours tes comptes avant de faire un virement.</p></details><details><summary>À propos</summary><p>Quitte, version 1.0. Une application pour partager les dépenses entre amis, en couple ou en solo.</p></details>`)
+ +card(`<div class="row2"><button class="primary" data-act="logout">Se déconnecter</button><button class="ghost danger" data-act="delacct">Supprimer mon compte</button></div>`)}
+
+const saveAuth=()=>{try{localStorage.setItem("quitte-auth",JSON.stringify(AU))}catch(e){}};
+const norm=u=>u.trim().toLowerCase().replace(/^@/,"");
+async function hashPw(pw,salt){
+ try{const k=await crypto.subtle.importKey("raw",new TextEncoder().encode(pw),"PBKDF2",false,["deriveBits"]);
+  const bits=await crypto.subtle.deriveBits({name:"PBKDF2",hash:"SHA-256",salt:new TextEncoder().encode(salt),iterations:120000},k,256);
+  return btoa(String.fromCharCode(...new Uint8Array(bits)))}
+ catch(e){let h=5381;const t=salt+pw;for(let i=0;i<t.length;i++)h=((h<<5)+h+t.charCodeAt(i))>>>0;return "f"+h}}
+function enter(u){AU.session=u;KEY="quitte-v1:"+u;loadData();tab="exp";saveAuth()}
+function logout(){AU.session=null;saveAuth();S={groups:[],cur:null};authMode="login";render()}
+const showErr=m=>{const el=$("#a-err");if(el)el.textContent=m};
+function authCheck(){const b=$("[data-act=login]");if(b)b.disabled=!($("#a-user").value.trim()&&$("#a-pass").value)}
+async function doLogin(){
+ const u=norm($("#a-user").value),p=$("#a-pass").value,acc=AU.users[u];
+ if(!acc||(await hashPw(p,acc.salt))!==acc.hash)return showErr("Identifiant ou mot de passe incorrect.");
+ enter(u);render()}
+async function doSignup(){
+ const name=$("#a-name").value.trim(),u=norm($("#a-user").value),p=$("#a-pass").value,p2=$("#a-pass2").value;
+ const err=!name?"Entre ton nom.":!/^[a-z0-9._]{3,20}$/.test(u)?"Nom d’utilisateur : 3 à 20 caractères (lettres, chiffres, point, tiret bas).":AU.users[u]?"Ce nom d’utilisateur est déjà pris.":p.length<6?"Le mot de passe doit faire au moins 6 caractères.":p!==p2?"Les mots de passe ne correspondent pas.":"";
+ if(err)return showErr(err);
+ const salt=uid()+uid();AU.users[u]={name,salt,hash:await hashPw(p,salt),created:Date.now()};
+ if(Object.keys(AU.users).length===1){try{const old=localStorage.getItem("quitte-v1");if(old)localStorage.setItem("quitte-v1:"+u,old)}catch(e){}}
+ enter(u);render()}
+function authView(){
+ const su=authMode==="signup";
+ return `<div class="auth"><div class="acard">${LOGO(72,true)}<h1 class="word">Quitte</h1>
+<p class="atag">${su?"Inscris-toi pour partager tes dépenses entre amis.":"Les bons comptes font les bons amis."}</p>
+${su?`<input id="a-name" placeholder="Nom complet" autocomplete="name" maxlength="40" aria-label="Nom complet">`:""}
+<input id="a-user" placeholder="Nom d’utilisateur" autocomplete="username" autocapitalize="none" spellcheck="false" maxlength="40" aria-label="Nom d’utilisateur">
+<div class="pw"><input id="a-pass" type="password" placeholder="Mot de passe" autocomplete="${su?"new-password":"current-password"}" aria-label="Mot de passe"><button type="button" class="eye" data-act="eye">Afficher</button></div>
+${su?`<input id="a-pass2" type="password" placeholder="Confirmer le mot de passe" autocomplete="new-password" aria-label="Confirmer le mot de passe">`:""}
+<div class="aerr" id="a-err" role="alert"></div>
+<button class="primary" data-act="${su?"signup":"login"}" ${su?"":"disabled"}>${su?"S’inscrire":"Se connecter"}</button>
+${su?"":`<button class="link" data-act="forgot">Mot de passe oublié ?</button>`}
+<p class="alocal">Les comptes sont enregistrés sur cet appareil uniquement.</p></div>
+<div class="acard small">${su?"Tu as déjà un compte ?":"Tu n’as pas de compte ?"} <button class="link b" data-act="${su?"gologin":"gosignup"}">${su?"Se connecter":"S’inscrire"}</button></div>
+<div class="langs"><button class="link" data-act="lang" data-lang="fr">Français</button> · <button class="link" data-act="lang" data-lang="en">English</button></div></div>`}
+function acct(){
+ const u=AU.session,a=AU.users[u],nm=a?a.name:u;
+ return `<h2>Mon compte</h2><ul class="list"><li><span class="av" style="background:var(--brand)">${esc(nm[0].toUpperCase())}</span><div class="mid"><b>${esc(nm)}</b><small>@${esc(u)}</small></div></li></ul><div class="row2" style="margin-top:10px"><button class="primary" data-act="logout">Se déconnecter</button><button class="ghost danger" data-act="delacct">Supprimer</button></div>`}
+
+function render(){
+ if(!AU.session){$("#nav").hidden=true;$("#fab").hidden=true;$("#app").innerHTML=authView();return}
+ const g=G(),app=$("#app");$("#nav").hidden=false;
+ $$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+ if(tab==="acc"){$("#fab").hidden=true;app.innerHTML=accTop()+`<div class="body">${viewAcc()}</div>`;return}
+ if(!g){$("#fab").hidden=true;app.innerHTML=welcome();return}
+ $("#fab").hidden=tab==="grp"||g.people.length<2;
+ $$("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.tab===tab));
+ app.innerHTML=topBar(g)+`<div class="body">${({exp:viewExp,bal:viewBal,bud:viewBud,st:viewStats,grp:viewGrp})[tab](g)}</div>`;if(tab==="bud")paintBud()}
+
+function create(name,emoji,names){
+ const people=names.map(n=>({id:uid(),name:n})),g={id:uid(),name,emoji,people,me:people[0].id,expenses:[]};
+ S.groups.push(g);S.cur=g.id;tab="exp";save();render();return g}
+function demo(){
+ const g=create(T("Week-end à Lyon"),"🏔️",["Léa","Tom","Inès","Hugo"]),[a,b,c,d]=g.people.map(p=>p.id),all=[a,b,c,d];
+ g.expenses.push(
+  {id:uid(),desc:T("Location du chalet"),cents:34000,payer:a,split:all,cat:"home",date:iso(3)},
+  {id:uid(),desc:T("Courses du vendredi"),cents:8640,payer:b,split:all,cat:"shop",date:iso(3)},
+  {id:uid(),desc:T("Essence et péage"),cents:5280,payer:c,split:[a,b,c],cat:"move",date:iso(2)},
+  {id:uid(),desc:T("Restaurant le Bouchon"),cents:11450,payer:d,split:all,cat:"food",date:iso(1)},
+  {id:uid(),desc:T("Karting"),cents:7200,payer:a,split:[a,b,d],cat:"fun",date:iso(1)},
+  {id:uid(),desc:"Remboursement",cents:3000,payer:c,split:[a],cat:"pay",type:"pay",date:iso(0)});
+ bud(g).days=3;
+ save();render()}
+
+function openSheet(){
+ const g=G();selCat="food";$("#f-amt").value="";$("#f-desc").value="";$("#f-date").value=iso(0);
+ $("#f-payer").innerHTML=g.people.map(p=>`<option value="${p.id}" ${p.id===g.me?"selected":""}>${esc(p.name)}</option>`).join("");
+ $("#f-split").innerHTML=g.people.map(p=>`<label class="chip on"><input type="checkbox" value="${p.id}" checked>${esc(p.name)}<input class="w" type="number" min="0" step="0.01" inputmode="decimal" data-w="${p.id}"></label>`).join("");
+ $("#f-cats").innerHTML=CATS.map(c=>`<button type="button" class="chip ${c[0]===selCat?"on":""}" data-cat="${c[0]}">${c[1]} ${c[2]}</button>`).join("");
+ hint();$("#sheet").hidden=false;$("#f-amt").focus()}
+function collect(){
+ const split=$$("#f-split input:checked").map(i=>i.value),cents=Math.round(parseFloat($("#f-amt").value)*100)||0,w={};
+ $$("#f-split .w").forEach(i=>{const v=parseFloat(i.value)||0;w[i.dataset.w]=mode==="ex"?Math.round(v*100):v});
+ return{split,cents,w}}
+function hint(){
+ const{split,cents,w}=collect(),n=split.length,g=G();let t="";
+ if(!n)t="Choisis au moins une personne.";
+ else if(cents>0){
+  if(mode==="eq")t=`Parts égales : ${eur(cents/n)} par personne (${n})`;
+  else if(mode==="sh"){const W=split.reduce((s,id)=>s+w[id],0),sh=shares({cents,split,mode,w});t=W>0?split.map(id=>`${P(g,id).name} ${eur(sh[id])}`).join(", "):"Indique la part de chacun."}
+  else{const d=cents-split.reduce((s,id)=>s+w[id],0);t=d===0?"Le total correspond.":d>0?`Reste à répartir : ${eur(d)}`:`Dépassement de ${eur(-d)}`}}
+ $("#f-hint").textContent=t}
+function setMode(m){mode=m;$("#f-split").className="chips m-"+m;$$("#f-mode .chip").forEach(c=>c.classList.toggle("on",c.dataset.mode===m));
+ $$("#f-split .w").forEach(i=>{i.value=m==="sh"?"1":"";i.placeholder=m==="ex"?"0,00":"";i.setAttribute("aria-label",m==="sh"?"Parts":"Montant")});hint()}
+function openForm(x){
+ openSheet();editId=x?x.id:null;
+ $("#f-title").textContent=x?"Modifier la dépense":"Nouvelle dépense";$("#f-save").textContent=x?"Enregistrer":"Ajouter la dépense";$("#f-del").hidden=!x;
+ setMode(x&&x.mode||"eq");if(!x)return;
+ $("#f-amt").value=x.cents/100;$("#f-desc").value=x.desc;$("#f-date").value=x.date;$("#f-payer").value=x.payer;
+ selCat=x.cat;$$("#f-cats .chip").forEach(c=>c.classList.toggle("on",c.dataset.cat===x.cat));
+ $$("#f-split input[type=checkbox]").forEach(i=>{i.checked=x.split.includes(i.value);i.closest(".chip").classList.toggle("on",i.checked)});
+ if(x.w)$$("#f-split .w").forEach(i=>{const v=x.w[i.dataset.w];if(v!==undefined)i.value=x.mode==="ex"?v/100:v});
+ hint()}
+function toast(m,u){clearTimeout(tt);const el=$("#toast");el.innerHTML=`<span>${esc(m)}</span>${u?`<button data-act="undo">Annuler</button>`:""}`;el.hidden=false;tt=setTimeout(()=>el.hidden=true,5000)}
+function removeEx(id){const g=G();undo={gid:g.id,x:g.expenses.find(y=>y.id===id)};g.expenses=g.expenses.filter(y=>y.id!==id);save();render();toast("Dépense supprimée",1)}
+function summary(g){const b=balances(g),t=transfers(b);
+ return `${g.emoji} ${g.name}\n`+g.people.map(p=>`${p.name} : ${b[p.id]>0?"+":b[p.id]<0?"−":""}${eur(Math.abs(b[p.id]))}`).join("\n")+"\n\n"+T("Pour être quittes :")+"\n"+(t.length?t.map(x=>`${P(g,x.from).name} → ${P(g,x.to).name} : ${eur(x.c)}`).join("\n"):T("Tout est réglé"))}
+function saveExp(){
+ const g=G(),{cents,split,w}=collect();
+ if(!(cents>0)){$("#f-amt").focus();return}
+ if(!split.length){alert("Choisis au moins une personne.");return}
+ if(mode==="sh"&&!split.some(id=>w[id]>0)){alert("Indique au moins une part.");return}
+ if(mode==="ex"&&split.reduce((s,id)=>s+w[id],0)!==cents){alert("Les montants doivent totaliser exactement "+eur(cents)+".");return}
+ const x={id:editId||uid(),desc:$("#f-desc").value.trim()||CATS.find(c=>c[0]===selCat)[2],cents,payer:$("#f-payer").value,split,cat:selCat,date:$("#f-date").value||iso(0),mode,w:mode==="eq"?undefined:w};
+ if(editId)g.expenses=g.expenses.map(y=>y.id===editId?x:y);else g.expenses.push(x);
+ save();$("#sheet").hidden=true;tab="exp";render()}
+
+document.addEventListener("click",e=>{
+ const t=e.target.closest("[data-act],[data-tab],[data-cat],[data-emo],[data-fc],[data-mode],[data-trip],[data-ac],.ex,#fab");if(!t)return;
+ const g=G(),a=t.dataset.act,ds=t.dataset;
+ if(ds.tab){tab=ds.tab;render();window.scrollTo(0,0);return}
+ if(t.id==="fab")return openForm();
+ if(ds.ac!==undefined){const v=$("#c-name").value;AU.users[AU.session].color=COLORS[+ds.ac];saveAuth();render();$("#c-name").value=v;return}
+ if(ds.trip){bud(g).n=+ds.trip;save();render();return}
+ if(ds.fc!==undefined){fc=ds.fc;render();return}
+ if(ds.mode){setMode(ds.mode);return}
+ if(ds.cat){selCat=ds.cat;$$("#f-cats .chip").forEach(c=>c.classList.toggle("on",c===t));return}
+ if(ds.emo){selEmo=ds.emo;$$("#w-emo .chip").forEach(c=>c.classList.toggle("on",c===t));return}
+ if(t.classList.contains("ex")){const x=g.expenses.find(y=>y.id===ds.id);if(x.type==="pay")removeEx(x.id);else openForm(x);return}
+ if(a==="cancel")$("#sheet").hidden=true;
+ else if(a==="save")saveExp();
+ else if(a==="all"||a==="none"){$$("#f-split input[type=checkbox]").forEach(i=>{i.checked=a==="all";i.closest(".chip").classList.toggle("on",i.checked)});hint()}
+ else if(a==="create"){
+  const names=[...new Set($("#w-people").value.split(/[,\n]/).map(s=>s.trim()).filter(Boolean))];
+  if(names.length<2){alert("Ajoute au moins deux participants, séparés par une virgule.");return}
+  create($("#w-name").value.trim()||"Mon groupe",selEmo,names)}
+ else if(a==="demo")demo();
+ else if(a==="login")doLogin();
+ else if(a==="signup")doSignup();
+ else if(a==="gosignup"){authMode="signup";render()}
+ else if(a==="gologin"){authMode="login";render()}
+ else if(a==="forgot")alert("Les comptes sont enregistrés uniquement sur cet appareil : le mot de passe ne peut pas être envoyé par e-mail. Si tu l’as perdu, crée un nouveau compte.")
+ else if(a==="eye"){const i=$("#a-pass"),show=i.type==="password";i.type=show?"text":"password";const i2=$("#a-pass2");if(i2)i2.type=i.type;t.textContent=show?"Masquer":"Afficher"}
+ else if(a==="logout")logout();
+ else if(a==="delacct")ask("Supprimer ton compte et toutes tes données sur cet appareil ?",{ok:"Supprimer",danger:1}).then(ok=>{if(ok){const u=AU.session;delete AU.users[u];try{localStorage.removeItem("quitte-v1:"+u)}catch(e){}logout()}})
+ else if(a==="savep"){const n=$("#c-name").value.trim();if(!n){alert("Entre ton nom.");return}AU.users[AU.session].name=n;saveAuth();render();toast("Profil enregistré")}
+ else if(a==="chpw")changePw();
+ else if(a==="backup"){const txt=JSON.stringify({app:"quitte",v:1,data:S});
+  if(navigator.share)navigator.share({text:txt}).catch(()=>{});
+  else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast("Sauvegarde copiée"),()=>toast("Copie impossible ici"));
+  else toast("Copie impossible ici")}
+ else if(a==="restore")ask("Colle ici ta sauvegarde :",{input:1,ok:"Restaurer"}).then(v=>{if(!v)return;try{const o=JSON.parse(v);if(!o||!o.data||!Array.isArray(o.data.groups))throw 0;S=o.data;save();render();toast("Données restaurées")}catch(e){toast("Sauvegarde invalide.")}})
+ else if(a==="wipe")ask("Effacer tous tes groupes et toutes tes dépenses ? Ton compte est conservé.",{ok:"Effacer",danger:1}).then(ok=>{if(ok){S={groups:[],cur:null};save();render();toast("Données effacées")}})
+ else if(a==="dyes")dclose($("#din").hidden?true:$("#din").value)
+ else if(a==="dno")dclose(false)
+ else if(a==="lang")setPref("lang",ds.lang)
+ else if(a==="del"){removeEx(editId);$("#sheet").hidden=true}
+ else if(a==="undo"){if(undo){const gg=S.groups.find(x=>x.id===undo.gid);if(gg){gg.expenses.push(undo.x);save();render()}undo=null}$("#toast").hidden=true}
+ else if(a==="share"){const txt=summary(g);
+  if(navigator.share)navigator.share({text:txt}).catch(()=>{});
+  else if(navigator.clipboard)navigator.clipboard.writeText(txt).then(()=>toast("Récapitulatif copié"),()=>toast("Copie impossible ici"));
+  else toast("Copie impossible ici")}
+ else if(a==="back"){S.cur=S.groups[0].id;render()}
+ else if(a==="newg"){S.cur=null;render()}
+ else if(a==="sw"){S.cur=ds.id;tab="exp";save();render()}
+ else if(a==="delg")ask("Supprimer ce groupe et toutes ses dépenses ?",{ok:"Supprimer",danger:1}).then(ok=>{if(ok){S.groups=S.groups.filter(x=>x.id!==g.id);S.cur=S.groups[0]?S.groups[0].id:null;save();render()}})
+ else if(a==="rm"){
+  if(g.expenses.some(x=>x.payer===ds.id||x.split.includes(ds.id))){alert("Supprime d’abord les dépenses de cette personne.");return}
+  g.people=g.people.filter(p=>p.id!==ds.id);if(g.me===ds.id)g.me=g.people[0]?g.people[0].id:null;save();render()}
+ else if(a==="addm"){
+  const n=$("#m-name").value.trim();if(!n)return;
+  if(g.people.some(p=>p.name.toLowerCase()===n.toLowerCase())){alert("Ce prénom existe déjà.");return}
+  const p={id:uid(),name:n};g.people.push(p);if(!g.me)g.me=p.id;save();render();$("#m-name").focus()}
+ else if(a==="pay"){g.expenses.push({id:uid(),desc:"Remboursement",cents:+ds.c,payer:ds.from,split:[ds.to],cat:"pay",type:"pay",date:iso(0)});save();render()}
+});
+document.addEventListener("change",e=>{
+ const g=G(),t=e.target;
+ if(t.matches("#f-split input[type=checkbox]")){t.closest(".chip").classList.toggle("on",t.checked);hint()}
+ else if(t.id==="g-name"){g.name=t.value.trim()||g.name;save();render()}
+ else if(t.id==="g-me"){g.me=t.value;save();render()}
+ else if(t.dataset.bu){bud(g).lines[t.dataset.bu].u=t.value;save();paintBud()}
+ else if(t.dataset.bl||t.dataset.bf)save()
+ else if(t.dataset.pref)setPref(t.dataset.pref,t.value)});
+document.addEventListener("input",e=>{const t=e.target;
+ if(t.closest&&t.closest(".auth"))authCheck();
+ else if(t.id==="f-amt")hint();
+ else if(t.matches("#f-split .w")){const cb=t.closest(".chip").querySelector("input[type=checkbox]");if(!cb.checked&&t.value){cb.checked=true;cb.closest(".chip").classList.add("on")}hint()}
+ else if(t.id==="q"){q=t.value;render();const i=$("#q");i.focus();i.setSelectionRange(q.length,q.length)}
+ else if(t.dataset.bl||t.dataset.bf){const b=bud(G()),v=parseFloat(t.value)||0;if(t.dataset.bl)b.lines[t.dataset.bl].a=v;else b[t.dataset.bf]=v;save();paintBud()}});
+document.addEventListener("keydown",e=>{
+ if(e.key==="Enter"&&e.target.id==="m-name")document.querySelector('[data-act="addm"]').click();
+ if(e.key==="Enter"&&(e.target.id==="w-people"||e.target.id==="w-name"))document.querySelector('[data-act="create"]').click();
+ if(e.key==="Enter"&&e.target.closest&&e.target.closest(".auth")){const b=document.querySelector(".auth .primary");if(b&&!b.disabled)b.click()}
+ if(e.key==="Escape"){$("#sheet").hidden=true;if(!$("#dlg").hidden)dclose(false)}});
+if(AU.session)enter(AU.session);
+applyPrefs();
+render();
+trTree(document.body);
+mo.observe(document.body,MOCFG);
+</script>
+</body>
+</html>
